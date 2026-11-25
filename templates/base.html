@@ -1,0 +1,58 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>{% block title %}Asia Plus{% endblock %}</title>        
+</head>
+<body>
+<header>
+    <div class="navbar">
+        <a href="{% url 'home' %}" class="logo">
+            ASIA <span>PLUS</span>
+        </a>
+
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'article_list' %}">News</a>
+
+            {% if user.is_authenticated %}
+                <span>Hello, {{ user.username }}</span>
+
+                <form action="{% url 'user_logout' %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn" type="submit">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+<footer>
+    <p>© 2026 Asia Plus. All rights reserved.</p>
+    <p>Your trusted source for the latest news.</p>
+</footer>
+
+</body>
+</html>

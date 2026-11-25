@@ -1,0 +1,57 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Home | Asia Plus{% endblock %}
+
+{% block content %}
+
+<h1 class="page-title">Latest News</h1>
+
+<form action="{% url 'search_news' %}" method="GET" class="search-box">
+    <input type="text" name="q" placeholder="Search news..." value="{{ query|default:'' }}">
+    <button class="btn" type="submit">Search</button>
+</form>
+
+<h3 style="margin-bottom:15px;">Categories</h3>
+
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px;">
+    {% for category in categories %}
+        <a class="btn" href="{% url 'article_list' %}?category={{ category.slug }}">
+            {{ category.name }}
+        </a>
+    {% endfor %}
+</div>
+
+<div class="news-grid">
+
+    {% for article in articles %}
+        <div class="news-card">
+
+            {% if article.image %}
+                <img src="{{ article.image.url }}" alt="{{ article.title }}">
+            {% endif %}
+
+            <div class="news-content">
+                <span class="category">{{ article.category.name }}</span>
+
+                <h3>{{ article.title }}</h3>
+
+                <p>{{ article.description|truncatewords:20 }}</p>
+
+                <p style="font-size:12px;margin-top:12px;">
+                    {{ article.created_at|date:"d M Y" }}
+                </p>
+
+                <a href="{% url 'article_detail' article.slug %}" class="btn">
+                    Read More
+                </a>
+            </div>
+
+        </div>
+    {% empty %}
+        <p>No news available.</p>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

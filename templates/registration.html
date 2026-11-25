@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Register | Asia Plus{% endblock %}
+
+{% block content %}
+
+<div class="form-box">
+    <h2>Create Account</h2>
+
+    <p style="text-align:center;color:#777;margin-bottom:20px;">
+        Join Asia Plus today!
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Enter username" required>
+
+        <label>Email Address</label>
+        <input type="email" name="email" placeholder="Enter email address" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Create password" required>
+
+        <button class="btn" type="submit">Create Account</button>
+    </form>
+
+    <p style="text-align:center;margin-top:20px;color:#777;">
+        Already have an account?
+        <a href="{% url 'login' %}" style="color:#e63946;">Login</a>
+    </p>
+</div>
+
+{% endblock %}

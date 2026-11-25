@@ -1,0 +1,66 @@
+
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title }} | Asia Plus{% endblock %}
+
+{% block content %}
+
+<span class="category">{{ article.category.name }}</span>
+
+<h1 class="page-title" style="margin-top:12px;">
+    {{ article.title }}
+</h1>
+
+<p style="color:#888;">
+    By {{ article.author.username }} |
+    {{ article.created_at|date:"d M Y" }} |
+    Views: {{ article.views }}
+</p>
+
+{% if article.image %}
+    <img class="article-image" src="{{ article.image.url }}" alt="{{ article.title }}">
+{% endif %}
+
+<div class="article-text">
+    {{ article.content|linebreaks }}
+</div>
+
+<hr style="margin:35px 0;border:0;border-top:1px solid #ddd;">
+
+<h2 style="color:#142b4a;margin-bottom:20px;">Comments</h2>
+
+{% for comment in comments %}
+    <div class="comment">
+        <strong>{{ comment.user.username }}</strong>
+        <p style="margin-top:10px;">{{ comment.text }}</p>
+        <small style="color:#888;">
+            {{ comment.created_at|date:"d M Y H:i" }}
+        </small>
+    </div>
+{% empty %}
+    <p>No comments yet.</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+    <div class="form-box" style="max-width:100%;">
+        <h2>Write a Comment</h2>
+
+        <form method="POST" action="{% url 'add_comment' article.id %}">
+            {% csrf_token %}
+
+            <textarea name="text" rows="4"
+                      placeholder="Write your comment..." required></textarea>
+
+            <button class="btn" type="submit">Send Comment</button>
+        </form>
+    </div>
+{% else %}
+    <p style="margin-top:20px;">
+        <a href="{% url 'login' %}" style="color:#e63946;">
+            Login
+        </a>
+        to write a comment.
+    </p>
+{% endif %}
+
+{% endblock %}
